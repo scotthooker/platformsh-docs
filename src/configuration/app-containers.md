@@ -9,7 +9,22 @@ You control your application and the way it will be built and deployed on Platfo
 
 ![](/images/config_diagrams/applications.jpg)
 
-An example of a minimalist `.platform.app.yaml` file for PHP is below:
+The `.platform.app.yaml` file is extremely flexible.  Depending on your needs it could be less than 10 lines long or over 100.  The only required keys are `name`, `type`, `disk`, and a minimal `web` block.  All others are optional.
+
+The basic properties are described on their own pages.
+
+* [`name`](/configuration/app/name.md) *(required)* - Sets the unique name of the application container.
+* [`type`](/configuration/app/type.md) *(required)* - Sets the container base image to use, including application language.
+* [`relationships`](/configuration/app/relationships.md) - Defines connections to other services and applications.
+* [`access`](/configuration/app/access.md) - Restricts SSH access with more granularity than the UI.
+* [`disk` and `mount`](/configuration/app/storage.md) *(required)* - Defines writeable file directories for the application.
+* [`build`, `dependencies`, and `hooks`](/configuration/app/build.md) - Control how the application gets compiled.
+* [`web`](/configuration/app/web.md) *(required)* - Controls how the application is served.
+* [`cron`](/configuration/app/cron.md) - Defines scheduled tasks for the application.
+
+## Example configuration
+
+An example of a minimalist `.platform.app.yaml` file for PHP, heavily commented, is below:
 
 ```yaml
 # .platform.app.yaml
@@ -74,47 +89,6 @@ web:
 > applications inside your Git repository (such as a RESTful web service and a
 > front-end, or a main web site and a blog), you need `.platform.app.yaml`
 > at the root of each application. See the [Multi-app](/configuration/app/multi-app.md) documentation.
-
-The `.platform.app.yaml` file is extremely flexible.  Depending on your needs it could be less than 10 lines long or over 100.  The only required keys are `name`, `type`, `disk`, and a minimal `web` block.  All others are optional.
- 
- The basic properties are described below, and other blocks are described in their own pages. 
-
-## Name
-
-The `name` is the unique identifier of the application. Platform.sh supports multiple applications within a project, so each application must have a **unique name** within a project. The name may only be composed of lower case alpha-numeric characters (a-z0-9).
-
-> **Warning**
-> Changing the `name` of your application after it has been deployed will destroy all storage volumes and result in the loss of all persistent data.  This is typically a Very Bad Thing to do. It could be useful under certain circumstances in the early stages of development but you almost certainly don't want to change it on a live project.
-
-This name is used in the `.platform/routes.yaml` file to define the HTTP upstream (by default `php:http`).  For instance, if you called your application `app` you will need to use `app:http` in the upstream field.
-
-You can also use this name in multi-application relationships.
-
-## Type
-
-The `type` key defines the base container image that will be used to run the application.  There is a separate base container image for each primary language for the application, often in multiple versions.  Supported languages include:
-
-* [`php`](/languages/php.md)
-* [`hhvm`](/languages/php.md)
-* [`nodejs`](/languages/nodejs.md)
-* [`python`](/languages/python.md)
-* [`ruby`](/languages/ruby.md)
-* [`golang`](/languages/go.md)
-
-See the appropriate language page for all available versions.
-
-**Example**
-
-```yaml
-type: php:7.1
-```
-
-## Runtime
-
-The `.platform.app.yaml` file also supports a `runtime` key that allows selected customizations to the language runtime. As those possibilities vary by language, please see the appropriate language documentation.
-
-* [PHP](/languages/php.md)
-
 
 ## Upgrading from previous versions of the configuration file.
 
